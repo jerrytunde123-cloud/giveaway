@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Davido 34th Birthday Giveaway</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #1c1e21;
+    }
+
+    /* --- TICKER (MARQUEE) STYLES --- */
+    .ticker-wrapper {
+      width: 100%;
+      background-color: #8c8bf3;
+      color: #000;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 6px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+    }
+    .ticker-content {
+      display: inline-block;
+      animation: marquee 15s linear infinite;
+    }
+    .ticker-content span { padding-right: 50px; }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* --- ADMIN PANEL STYLES --- */
+    #admin-panel {
+      display: none; background: #1a1e2b; color: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 520px; margin: 20px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 1001; position: relative;
+    }
+    #admin-panel h3 { margin-bottom: 15px; font-size: 1.2rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    #admin-panel label { display: block; margin-bottom: 5px; font-size: 0.85rem; color: #b0b8cc; font-weight: 600;}
+    #admin-panel input, #admin-panel textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #3b3f4e; background: #2d3348; color: white; font-family: inherit; font-size: 0.9rem; }
+    .admin-row { display: flex; gap: 10px; }
+    .admin-row > div { flex: 1; }
+    #admin-panel button { background: #1877f2; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+
+    /* --- PAGE STYLES --- */
+    .card {
+      background: #ffffff; max-width: 520px; width: 100%; border-radius: 0 0 12px 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;
+    }
+
+    .hero-image { width: 100%; display: block; background-color: #1a1e2b; min-height: 280px; object-fit: cover; }
+    .content { padding: 1.5rem 1.2rem 1rem 1.2rem; text-align: center; }
+
+    /* --- INITIAL VIEW --- */
+    #view-initial { display: block; }
+    .main-headline { font-size: 1.3rem; font-weight: 600; line-height: 1.4; margin-bottom: 1.2rem; }
+    .powered-by { font-size: 1.05rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.2rem; color: #1c1e21; }
+    .instructions { font-size: 1rem; color: #3b3f4e; line-height: 1.5; margin-bottom: 1.5rem; }
+    .cta-button {
+      display: block; width: 100%; background: #1a2bcc; color: #ffffff; font-size: 1.4rem; font-weight: 700; padding: 1rem; border-radius: 8px; text-decoration: none; margin-bottom: 1rem; border: none; cursor: pointer;
+    }
+
+    /* --- FORM VIEW --- */
+    #view-form { display: none; padding: 1.5rem 1.2rem; }
+    .form-group { margin-bottom: 1.2rem; text-align: left; }
+    .form-group label { display: block; font-weight: 700; margin-bottom: 0.5rem; font-size: 1.1rem; color: #000; }
+    .form-group input { width: 100%; padding: 1rem; border: 1px solid #ccd0d5; border-radius: 6px; font-size: 1rem; outline: none; }
+    .submit-btn { display: block; width: 100%; background: #0000ff; color: white; font-size: 1.3rem; font-weight: 700; padding: 1rem; border: none; cursor: pointer; margin-top: 0.5rem; text-transform: uppercase; }
+
+    /* --- VERIFICATION VIEW --- */
+    #view-verify { display: none; padding: 1.5rem 1.2rem; text-align: left; }
+    .verify-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .verify-app-num { font-size: 1.15rem; font-weight: 600; margin-bottom: 1rem; color: #1c1e21; }
+    .verify-details { font-size: 1.05rem; line-height: 1.5; margin-bottom: 1rem; }
+    .text-red { color: #d32f2f; font-weight: 700; }
+    .text-green { color: #00a400; font-weight: 700; }
+    .verify-heading { font-size: 1.2rem; font-weight: 700; color: #d32f2f; margin-bottom: 1rem; }
+    .verify-list { margin-left: 1.2rem; margin-bottom: 1rem; font-size: 1.05rem; line-height: 1.5; }
+    .verify-list li { margin-bottom: 0.5rem; }
+    
+    .share-btn { display: block; width: 100%; background: #0000ff; color: white; font-size: 1.4rem; font-weight: 700; padding: 1rem; border: none; border-radius: 6px; cursor: pointer; margin: 1.5rem 0; text-transform: uppercase; }
+    
+    .progress-container {
+      display: flex; border: 2px solid #00a400; height: 45px; margin-bottom: 1.5rem; position: relative; background: #fff;
+    }
+    .progress-bar { background: #00a400; width: 0%; transition: width 0.4s ease-out; height: 100%; }
+    .progress-text { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 700; font-size: 1.1rem; color: #000; }
+
+    .withdraw-btn { display: block; width: 80%; margin: 0 auto; background: #000080; color: white; font-size: 1.1rem; font-weight: 700; padding: 0.9rem; border: none; border-radius: 6px; cursor: pointer; }
+
+    .urgency { font-size: 1rem; font-weight: 700; color: #d32f2f; text-transform: uppercase; margin-top: 1rem; margin-bottom: 0.5rem; text-align: center; }
+
+    /* --- FACEBOOK COMMENT SECTION --- */
+    .fb-stats-row { display: flex; justify-content: space-between; padding: 0 1.2rem 0.8rem 1.2rem; font-size: 0.95rem; color: #65676b; }
+    .reactions-left, .stats-right { display: flex; align-items: center; gap: 0.5rem; }
+    .fb-icons { display: flex; align-items: center; background: #1877f2; border-radius: 50%; padding: 2px; color: white; font-size: 0.7rem; width: 20px; height: 20px; justify-content: center; border: 2px solid white; box-shadow: -4px 0 0 -2px #f3425f; margin-right: 5px; }
+    .fb-actions-bar { display: flex; justify-content: space-around; padding: 0.4rem 1rem; border-top: 1px solid #ced0d4; border-bottom: 1px solid #ced0d4; }
+    .fb-action-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.5rem; width: 100%; font-size: 0.95rem; font-weight: 600; color: #65676b; background: none; border: none; cursor: pointer; }
+    
+    .typing-indicator { padding: 0.8rem 1.2rem 0.2rem 1.2rem; font-size: 0.85rem; color: #65676b; font-style: italic; display: none; }
+    .comments-container { padding: 0.8rem 1.2rem; max-height: 400px; overflow-y: auto; }
+    .comment-wrapper { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; animation: slideIn 0.3s ease-out; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; flex-shrink: 0; }
+    .bg-blue { background: #1877f2; } .bg-green { background: #00a400; } .bg-orange { background: #fa3e3e; } .bg-teal { background: #00b5ad; } .bg-purple { background: #8b44b8; }
+
+    .comment-content { display: flex; flex-direction: column; max-width: 85%; }
+    .comment-bubble { background: #f0f2f5; padding: 0.6rem 0.8rem; border-radius: 18px; font-size: 0.9rem; line-height: 1.3; }
+    .comment-author { font-weight: 600; display: block; margin-bottom: 2px; }
+    .comment-image { margin-top: 5px; max-width: 100%; border-radius: 12px; border: 1px solid #ced0d4; }
+    .comment-actions { display: flex; gap: 1rem; font-size: 0.75rem; font-weight: 600; color: #65676b; margin-top: 0.3rem; padding-left: 0.5rem; }
+    .comment-input-area { display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.2rem; border-top: 1px solid #ced0d4; }
+    .comment-input { flex: 1; background: #f0f2f5; border: none; padding: 0.6rem 1rem; border-radius: 20px; font-size: 0.95rem; outline: none; }
+    .send-btn { background: #1877f2; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <!-- MOVING TICKER -->
+  <div class="ticker-wrapper">
+    <div class="ticker-content" id="ticker-text">
+      <!-- Content will be filled by JS -->
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 520px;">
+    
+    <!-- ADMIN PANEL -->
+    <div id="admin-panel">
+      <h3>⚙️ Admin Settings</h3>
+      <label>Upload New Image</label>
+      <input type="file" id="edit-image" accept="image/*">
+      <label>Headline Text</label>
+      <textarea id="edit-headline" rows="2"></textarea>
+      <label>Stats (Likes, Comments, Shares)</label>
+      <div class="admin-row">
+        <div><input type="number" id="edit-likes" placeholder="Likes"></div>
+        <div><input type="number" id="edit-comments" placeholder="Comments"></div>
+        <div><input type="number" id="edit-shares" placeholder="Shares"></div>
+      </div>
+      <button onclick="saveChanges()">Save Settings</button>
+    </div>
+
+    <!-- MAIN CARD -->
+    <div class="card">
+      
+      <!-- VIEW 1: INITIAL -->
+      <div id="view-initial">
+        <img id="display-image" class="hero-image" src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1200&auto=format&fit=crop" alt="Giveaway Image">
+        <div class="content">
+          <div id="display-headline" class="main-headline">
+            Davido is giving out N50,000 Naira Start-Up Funds to all Nigerians to celebrate his 34th Birthday.
+          </div>
+          <div class="powered-by">POWERED BY: DAVIDO @34</div>
+          <div class="instructions">
+            Tap the button below, complete the <strong>30-second registration</strong>, confirm your details, and get your <strong>₦50,000</strong> credited instantly.
+          </div>
+          <button class="cta-button" onclick="showForm()">Accept ₦50,000</button>
+          <div class="urgency" id="deadline-text">ENDING SOON</div>
+        </div>
+      </div>
+
+      <!-- VIEW 2: FORM -->
+      <div id="view-form">
+        <div class="form-group">
+          <label>name:</label>
+          <input type="text" id="user-name" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label>Account number:</label>
+          <input type="number" id="user-account" placeholder="Enter your Account number">
+        </div>
+        <button class="submit-btn" onclick="submitForm()">SUBMIT</button>
+        <div class="urgency" id="deadline-text-form">ENDING SOON</div>
+      </div>
+
+      <!-- VIEW 3: VERIFICATION -->
+      <div id="view-verify">
+        <div class="verify-title">Congratulations! Your Application Number is <span id="app-number">716oZ</span></div>
+        <div class="verify-details">
+          NAME: <span class="text-green" id="verify-name">Cut aug2 by s</span>, Account number <span class="text-green" id="verify-account">540494840958</span>
+        </div>
+        <div class="verify-details">
+          Your N50,000 Naira is still <span class="text-red">pending</span> because you have not completed the Human verification process <span class="text-green">Please complete the verification process to withdraw your money Now</span>
+        </div>
+        <div class="verify-heading">How to proceed: to the withdrawal form</div>
+        <ol class="verify-list">
+          <li>Share it to 5 groups or with 15 friends on WhatsApp (Click the "SHARE" button below).</li>
+          <li>Your registration will automatically complete once the GREEN verification bar is filled.</li>
+          <li>Click "Withdraw Cash now" to claim your ₦50,000 ..</li>
+        </ol>
+        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">👇👇👇</div>
+        
+        <button class="share-btn" onclick="handleShare()">SHARE</button>
+        
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+          <div class="progress-text" id="progress-text">0%</div>
+        </div>
+
+        <button class="withdraw-btn" onclick="handleWithdraw()">Withdraw Cash now</button>
+        
+        <div class="urgency" id="deadline-text-verify">ENDING SOON</div>
+      </div>
+
+      <!-- FACEBOOK FEED SECTION -->
+      <div class="fb-stats-row">
+        <div class="reactions-left">
+          <div class="fb-icons">👍</div>
+          <span id="stat-likes">346</span>
+        </div>
+        <div class="stats-right">
+          <span id="stat-comments">31</span> comments &nbsp; 
+          <span id="stat-shares">20</span> shares
+        </div>
+      </div>
+      <div class="fb-actions-bar">
+        <button class="fb-action-btn"><span>👍</span> Like</button>
+        <button class="fb-action-btn"><span>💬</span> Comment</button>
+        <button class="fb-action-btn"><span>↪️</span> Share</button>
+      </div>
+      <div id="typing-indicator" class="typing-indicator">Someone is typing...</div>
+      <div class="comments-container" id="comments-container"></div>
+      <div class="comment-input-area">
+        <div class="avatar bg-teal" style="width:28px; height:28px; font-size:0.7rem;">Y</div>
+        <input type="text" class="comment-input" placeholder="Write a comment...">
+        <button class="send-btn">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- 1. DYNAMIC TICKER ---
+    const banks = ["Sterling Bank", "Opay", "Palmpay", "First Bank", "Kuda", "GTBank", "UBA", "Access Bank"];
+    const names = ["Zainab Ahmed", "Daniel Adekunle", "Nneka Eze", "Hauwa Yusuf", "Chinedu Okafor", "Blessing Peter", "Ibrahim Musa", "Folake Adebayo"];
+    
+    function generateTicker() {
+      let tickerHTML = "";
+      for(let i=0; i<10; i++) {
+        let amount = Math.floor(Math.random() * 45 + 5) * 1000;
+        let name = names[Math.floor(Math.random() * names.length)];
+        let bank = banks[Math.floor(Math.random() * banks.length)];
+        let account = Math.floor(Math.random() * 9000000000) + 1000000000;
+        tickerHTML += `<span>₦${amount.toLocaleString()} sent to ${name} ${account} ${bank}</span>`;
+      }
+      document.getElementById('ticker-text').innerHTML = tickerHTML + tickerHTML;
+    }
+    generateTicker();
+
+    // --- 2. AUTO-UPDATING DEADLINE ---
+    function updateDeadline() {
+      const today = new Date();
+      const deadline = new Date(today);
+      deadline.setDate(deadline.getDate() + 2);
+      const day = deadline.getDate();
+      const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+      const month = monthNames[deadline.getMonth()];
+      let suffix = "TH";
+      if (day === 1 || day === 21 || day === 31) suffix = "ST";
+      else if (day === 2 || day === 22) suffix = "ND";
+      else if (day === 3 || day === 23) suffix = "RD";
+      
+      const deadlineString = `ENDING ${day}${suffix} ${month}`;
+      document.querySelectorAll('.urgency').forEach(el => el.innerText = deadlineString);
+    }
+    updateDeadline();
+
+    // --- 3. VIEW SWITCHING & FORM SUBMISSION ---
+    function showForm() {
+      document.getElementById('view-initial').style.display = 'none';
+      document.getElementById('view-form').style.display = 'block';
+    }
+
+    function submitForm() {
+      const name = document.getElementById('user-name').value;
+      const account = document.getElementById('user-account').value;
+
+      if (!name || !account) {
+        alert("Please fill in all details.");
+        return;
+      }
+      
+      document.getElementById('verify-name').innerText = name;
+      document.getElementById('verify-account').innerText = account;
+      
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let appNum = "";
+      for(let i=0; i<5; i++) appNum += chars.charAt(Math.floor(Math.random() * chars.length));
+      document.getElementById('app-number').innerText = appNum;
+
+      document.getElementById('view-form').style.display = 'none';
+      document.getElementById('view-verify').style.display = 'block';
+    }
+
+    // --- 4. SMART PROGRESS BAR & SHARE LOGIC ---
+    let progress = 0;
+    let clickCount = 0;
+
+    function handleShare() {
+      clickCount++;
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'Davido 34th Birthday Giveaway',
+          text: 'Davido is giving out N50,000 to all Nigerians. Claim yours now!',
+          url: window.location.href
+        }).catch(console.error);
+      }
+
+      if (clickCount <= 3) {
+        progress += 16.6;
+      } else {
+        if (progress < 80) progress += 5;
+        else if (progress < 95) progress += 2;
+        else if (progress < 99) progress += 1;
+      }
+
+      if (progress > 99) progress = 99;
+
+      document.getElementById('progress-bar').style.width = progress + '%';
+      document.getElementById('progress-text').innerText = Math.floor(progress) + '%';
+
+      // UPDATED POPUP MESSAGE
+      if (clickCount % 3 === 0) {
+        setTimeout(() => {
+          alert("⚠️ Note: Repeated sharing to the same group or chat don't count, please share to a new chat or group every time.");
+        }, 500);
+      }
+    }
+
+    function handleWithdraw() {
+      if (progress < 99) {
+        alert("Verification incomplete! You must share to fill the green bar to 100% before you can withdraw.");
+      } else {
+        alert("Processing withdrawal...");
+      }
+    }
+
+    // --- 5. LIVE FACEBOOK FEED LOGIC ---
+    let currentStats = { likes: 346, comments: 31, shares: 20 };
+    
+    const randomNames = [
+      { name: "Folake Adebayo", initials: "FA", color: "bg-blue" },
+      { name: "Ibrahim Musa", initials: "IM", color: "bg-blue" },
+      { name: "Ngozi Eze", initials: "NE", color: "bg-teal" },
+      { name: "Tunde Bakare", initials: "TB", color: "bg-purple" },
+      { name: "Blessing Okoro", initials: "BO", color: "bg-green" },
+      { name: "Musa Danjuma", initials: "MD", color: "bg-orange" }
+    ];
+    const randomMessages = [
+      "Just received mine, thank you Davido! 🙏",
+      "My alert just entered now now! ❤️",
+      "Is it still paying? I want to do mine.",
+      "Received successfully. God bless Davido.",
+      "I thought it was a scam until I got my alert!",
+      "Slots are going fast, hurry up guys!"
+    ];
+
+    const commentsContainer = document.getElementById('comments-container');
+    const typingIndicator = document.getElementById('typing-indicator');
+
+    function updateStatsUI() {
+      document.getElementById('stat-likes').innerText = currentStats.likes;
+      document.getElementById('stat-comments').innerText = currentStats.comments;
+      document.getElementById('stat-shares').innerText = currentStats.shares;
+    }
+
+    function addComment(name, initials, colorClass, text) {
+      const html = `
+        <div class="comment-wrapper">
+          <div class="avatar ${colorClass}">${initials}</div>
+          <div class="comment-content">
+            <div class="comment-bubble">
+              <span class="comment-author">${name}</span>${text}
+            </div>
+            <div class="comment-actions"><span>Like</span><span>Reply</span></div>
+          </div>
+        </div>`;
+      commentsContainer.insertAdjacentHTML('beforeend', html);
+      commentsContainer.scrollTop = commentsContainer.scrollHeight;
+    }
+
+    addComment("Yusuf Abdullahi", "YA", "bg-green", "Received mine successfully.");
+    addComment("Emeka Obi", "EO", "bg-teal", "This is pure love for the people. Thank you Davido!");
+
+    function startLiveFeed() {
+      setInterval(() => {
+        const user = randomNames[Math.floor(Math.random() * randomNames.length)];
+        typingIndicator.innerText = `${user.name} is typing...`;
+        typingIndicator.style.display = 'block';
+
+        setTimeout(() => {
+          typingIndicator.style.display = 'none';
+          const msg = randomMessages[Math.floor(Math.random() * randomMessages.length)];
+          addComment(user.name, user.initials, user.color, msg);
+          currentStats.comments++;
+          currentStats.likes += Math.floor(Math.random() * 3) + 1;
+          updateStatsUI();
+        }, 2000);
+      }, 10000);
+    }
+    startLiveFeed();
+
+    // --- ADMIN SAVE LOGIC ---
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === 'true') {
+      document.getElementById('admin-panel').style.display = 'block';
+    }
+    function saveChanges() {
+      const newHeadline = document.getElementById('edit-headline').value;
+      if(newHeadline) document.getElementById('display-headline').innerText = newHeadline;
+      
+      const likes = document.getElementById('edit-likes').value;
+      const comms = document.getElementById('edit-comments').value;
+      const shares = document.getElementById('edit-shares').value;
+      
+      if(likes) currentStats.likes = parseInt(likes);
+      if(comms) currentStats.comments = parseInt(comms);
+      if(shares) currentStats.shares = parseInt(shares);
+      updateStatsUI();
+      
+      const fileInput = document.getElementById('edit-image');
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) { document.getElementById('display-image').src = e.target.result; };
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+      alert("Settings Saved!");
+    }
+  </script>
+</body>
+</html>
